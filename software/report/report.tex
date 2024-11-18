@@ -1,0 +1,172 @@
+  %iffalse
+
+\let\negmedspace\undefined
+\let\negthickspace\undefined
+\documentclass[journal,12pt,onecolumn]{IEEEtran}
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{txfonts}
+\usepackage{listings}
+\usepackage{enumitem}
+\usepackage{mathtools}
+\usepackage{gensymb}
+\usepackage{comment}
+\usepackage[breaklinks=true]{hyperref}
+\usepackage{tkz-euclide} 
+\usepackage{listings}
+\usepackage{gvv}
+
+%\def\inputGnumericTable{}                                 
+\usepackage[latin1]{inputenc}     
+\usepackage{xparse}
+\usepackage{color}                                            
+\usepackage{array}                                            
+\usepackage{longtable}                                       
+\usepackage{calc}                                             
+\usepackage{multirow}
+\usepackage{multicol}
+\usepackage{hhline}                                           
+\usepackage{ifthen}                                           
+\usepackage{lscape}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{float}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{problem}{Problem}
+\newtheorem{proposition}{Proposition}[section]
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{example}{Example}[section]
+\newtheorem{definition}[problem]{Definition}
+\newcommand{\BEQA}{\begin{eqnarray}}
+\newcommand{\EEQA}{\end{eqnarray}}
+\newcommand{\define}{\stackrel{\triangle}{=}}
+\theoremstyle{remark}
+\newtheorem{rem}{Remark}
+% Marks the beginning of the document
+\begin{document}
+\title{{MATRIX THEORY - EE1030}\\
+Software Assignment}
+
+\author{ee24btech11058 - P.Shiny Diavajna}
+\maketitle
+\renewcommand{\thefigure}{\theenumi}
+\renewcommand{\thetable}{\theenumi}
+
+ \textbf{Aim :} To compute the eigenvalues of a given matrix using C code.\\
+
+ \textbf{Introduction :} \\
+ \begin{itemize}
+     \item \textbf{What are Eigenvalues ?}\\
+ Eigenvalues are associated with a square matrix $A$ and represent scalars,$\lambda$, such that when a matrix multiplies a vector $v$, the result is the vector $v$ scaled by $\lambda$. This relationship is expressed as:
+    \begin{align*}
+        Av=\lambda v\\
+    \end{align*}
+  
+    
+ \end{itemize}
+\textbf{Chosen Algorithm to calculate Eigenvalues:}\\
+
+\textbf{QR Algorithm with Gram Schmidt Orthogonalization }
+    \begin{itemize}
+    \item   The QR algorithm is an iterative method for calculating eigenvalues of a matrix. It repeatedly factors a given matrix $A$ into a product of an orthogonal matrix $Q$ and an upper triangular matrix $R$, then updates $A$ as $A=RQ$. Over iterations, $A$ converges to a quasi-diagonal matrix, where the diagonal elements approximate the eigenvalues.
+
+    \item \textbf{Gram-Schmidt Orthogonalization} is used to compute the orthogonal matrix $Q$ during $QR$ factorization. It ensures numerical stability by orthogonalizing the columns of $A$ explicitly.\\
+     \end{itemize}
+
+\textbf{Time Complexity:}
+
+\begin{itemize}
+    \item  \textbf{QR Factorization with Gram-Schmidt:} For an $n\times n$matrix, the Gram-Schmidt process has a complexity of $O(n^3)$.
+    \item  \textbf{Overall QR Algorithm :} Since the $QR$ factorization is performed iteratively ,the total complexity depends on the number of iterations $k$. For $k$ iterations, the complexity is  $O(kn^3).$
+    For matrices that converge quickly (e.g., symmetric matrices), $k$ is often small.\\
+\end{itemize}
+
+\textbf{Other Aspects :}
+\begin{enumerate}
+    \item \textbf{Memory Usage:}The QR algorithm requires storing the matrices $Q$ and $R$, making memory usage approximately $O(n^2)$.\\
+
+    \item \textbf{Convergence Rate :} The convergence of the QR algorithm depends on the type of matrix 
+    \begin{itemize}
+        \item The algorithm converges rapidly , often quadratically, without additional enhancements.
+
+        \item Convergence can be slower and may require shifts or deflation techniques to accelerate. The rate also depends on how well-separated the eigenvalues requiring more iterations.\\
+        
+    \end{itemize}
+
+    \item \textbf{Suitability:}
+    \begin{itemize}
+        \item \textbf{Symmetric Matrices:} Excellent due to faster convergence and numerical stability.
+
+        \item \textbf{Sparse Matrices:} the algorithm may not preserve sparsity, leading to increased computational costs.
+
+        \item \textbf{Large Matrices:} High computational cost per iteration makes it less practical for very large matrices. However,it can handle moderately large matrices effectively.\\
+    \end{itemize}
+\end{enumerate} 
+
+\textbf{Pros of the QR Algorithm:}
+\begin{enumerate}
+    \item \textbf{Widely Applicable :} Works for general square matrices, including non-symmetric and non-diagonalizable ones.\\
+
+    \item \textbf{Stability:} Numerically stable for many types of matrices, especially symmetric matrices.\\
+
+    \item \textbf{High efficiency for Small to Medium Matrices:}
+    \begin{itemize}
+        \item Scales well for matrices of moderate size.
+        \item Reduces the matrix iteratively while preserving eigenvalues, avoiding explicit determinant calculations.\\
+    \end{itemize}
+    \item \textbf{Simplicity:} Straightforward to implement and adapt for specific matrix types (e.g., Hessenberg or tridiagonal matrices).\\
+\end{enumerate}
+
+\textbf{Cons of the QR Algorithm:}
+\begin{enumerate}
+    \item \textbf{Computational Complexity:} Requires $O(n^3)$ operations per iteration for a full matrix, which may be inefficient for very large matrices.\\
+
+    \item \textbf{Memory Usage:} Needs significant memory for intermediate calculations, especially for dense matrices.\\
+
+    \item \textbf{Less efficient for Sparse Matrices :} Algorithms like Arnoldi Iteration or Lanczos Method are better suited for sparse matrices.\\
+
+    \item  \textbf{Slow Convergence for some Matrices:} Without shifts, convergence can be slow or fail for certain matrices.\\
+    
+\end{enumerate}
+\textbf{Comparison with other algorithms:}
+ \begin{table}[ht]
+\centering
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textbf{Algorithm} & \textbf{Time Complexity} & \textbf{Accuracy} & \textbf{Suitability} \\ 
+\hline
+QR Algorithm & $O(kn^3)$ & High for all matrices & Best for dense, symmetric matrices \\ 
+Power Iteration & $O(n^2k)$ & Good for dominant eigenvalue & Best for largest eigenvalue only \\ 
+Jacobi Method & $O(n^3 \log n)$ & High for symmetric matrices & Best for symmetric matrices \\ 
+Lanczos Method & $O(kn^2)$ & Moderate & Best for sparse symmetric matrices \\ 
+Divide and Conquer & $O(n^3)$ & High & Suitable for symmetric matrices \\ 
+\hline 
+\end{tabular}
+\end{table} \\
+
+
+\textbf{Why Choose the QR Algorithm ?}
+\begin{itemize}
+    \item \textbf{General Purpose:} It handles most types of matrices reliably,making it a go-to method when matrix-specific optimizations aren't critical.\\
+
+    \item \textbf{Accuracy:} Produces highly accurate eigenvalues, particularly for symmetric or well-conditioned matrices.\\
+
+    \item \textbf{Iterative Improvement} By reducing the matrix iteratively, it avoids explicitly solving high-degree characteristic polynomials, which can be unstable numerically.\\
+\newpage
+  \textbf{When is QR algorithm the best choice ?}
+  \begin{itemize}
+      \item The matrix size is small to medium.
+      \item The matrix is dense,symmetric or requires precise eigen values.\\
+  \end{itemize}
+
+\end{itemize}
+\textbf{Conclusion:} \\
+The $QR$ algorithm with Gram-Schmidt orthogonalization is a robust and accurate method for eigenvalue computation, particularly for symmetric and dense matrices. However, its $O(kn^3)$ complexity makes it less efficient for very large or sparse matrices, where specialized methods like Lanczos are more suitable. For practical applications, matrix properties and computational resources dictate the choice of algorithm.
+
+
+\end{document}
